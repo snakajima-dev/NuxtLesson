@@ -9,8 +9,18 @@
     "generate": "nuxt generate"
   },
   "dependencies": {
+    "@nuxtjs/axios": "^5.13.6",
+    "axios": "^0.21.1",
+    "bcrypt": "^5.0.1",
+    "body-parser": "^1.19.0",
     "core-js": "^3.15.1",
+    "express": "^4.17.1",
+    "express-validator": "^6.12.1",
+    "moment": "^2.29.1",
+    "mysql": "^2.18.1",
     "nuxt": "^2.15.7"
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@nuxt/types": "~2.15.0"
+  }
 }
