@@ -2,24 +2,24 @@
   <div class="contents-wrapper">
     <div class="login_wrapper">
       <h1 class="card-title">Login</h1>
-      <div class="login-form">
+      <form class="login-form" action="#">
         <div class="form-mailaddress">
-          <input type="email" class="login-mailaddress" placeholder="sample@mail.com" required>
+          <input type="email" class="login-mailaddress" placeholder="sample@mail.com" v-model="loginMailAddress"
+                 required>
         </div>
         <div class="form-password">
-          <input type="password" class="login-password" placeholder="password" required>
-          <input type="password" class="password-confirm" placeholder="confirm" required>
+          <input type="password" class="login-password" placeholder="password" v-model="loginPassword" required>
+          <input type="password" class="password-confirm" placeholder="confirm" v-model="loginPasswordConfirm" required>
         </div>
         <div class="for-get-password">
           <nuxt-link to="/register">
             <span>パスワードを忘れたら... &iquest;</span>
           </nuxt-link>
         </div>
-      </div>
+      </form>
     </div>
-
     <div class="form-send">
-      <button type="submit">送信</button>
+      <button type="submit" @click="submitClick">送信</button>
     </div>
   </div>
 </template>
@@ -29,10 +29,22 @@ export default {
   head() {
     return {title: "Login"}
   },
+  data() {
+    return {
+      loginMailAddress: null,
+      loginPassword: null,
+      loginPasswordConfirm: null
+    }
+  },
   async asyncData({$axios}) {
     const items = await $axios.$get("http://localhost:5000/")
     console.log(items)
     return {items};
+  },
+  methods: {
+    submitClick: () => {
+      console.log("ClickFunction{SubmitClick}")
+    }
   }
 };
 </script>

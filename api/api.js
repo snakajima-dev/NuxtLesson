@@ -1,16 +1,23 @@
 const express = require('express')
 const mysql = require('mysql');
 const bodyParser = require("body-parser");
+const cors = require('cors')
+const corsOptions = {
+  origin: 'http://localhost:3000',
+  credential: true,
+  optionsSuccessStatus: 200
+};
 const bcrypt = require('bcrypt');
 const app = express();
 const port = 5000;
 
+app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({extended: true}));
 
 const connection = mysql.createConnection({
   host: 'localhost',
   user: 'todoUser',
-  password: '******',
+  password: 'todoUser5963',
   database: 'nodetodo'
 });
 
@@ -23,20 +30,13 @@ app.get('/', (req, res) => {
   });
 })
 
-app.get('/randomInsert', ((req, res) => {
+app.post('/add', ((req, res) => {
   res.set({'Access-Control-Allow-Origin': '*'});//この記載で※1:CORSを許可する
-  const data = {
-    id: null,
-    contents: Math.random(),
-    create_user: 'TEST',
-    create_at: '2020-02-01 00:00:00:',
-    delete_at: '2020-02-01 00:00:00',
-    deleted: false
-  }
-  connection.query('INSERT INTO todo values ?', data, (err, res) => {
-    if (err) throw err;
-    console.log(data.toString())
-  })
+  // const sql = "insert into todo(contents, create_user, create_at, delete_at,deleted) values ('a','seiha','2020-02-01 00:00:00','2020-02-01 00:00:00',TRUE)";
+  console.log(req.body);
+  let password = req.body.password;
+  let hashPass = bcrypt.hashSync(password,10);
+  console.log("Hash:" + hashPass);
 }))
 
 app.get('/result', (erq, res) => {

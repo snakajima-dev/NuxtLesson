@@ -2,20 +2,22 @@
   <div class="contents-wrapper">
     <div class="register_wrapper">
       <h1 class="card-title">Register</h1>
-      <div class="register-form">
+      <form class="register-form" @submit.prevent="onClickSubmit">
         <div class="form-mailaddress">
-          <input type="email" class="register-mailaddress" placeholder="sample@mail.com" required>
+          <input type="email" class="register-mailaddress" placeholder="sample@mail.com" v-model="registerMailAddress"
+                 required>
         </div>
         <div class="form-password">
-          <input type="password" class="register-password" placeholder="password" required>
-          <input type="password" class="password-confirm" placeholder="confirm" required>
+          <input type="password" class="register-password" placeholder="password" v-model="registerPassword" required>
+          <input type="password" class="password-confirm" placeholder="confirm" v-model="registerPasswordConfirm"
+                 required>
         </div>
-      </div>
+        <div class="form-send">
+          <button type="submit">登録</button>
+        </div>
+      </form>
     </div>
 
-    <div class="form-send">
-      <button type="submit">登録</button>
-    </div>
   </div>
 </template>
 
@@ -24,10 +26,30 @@ export default {
   head() {
     return {title: "Account Register"}
   },
+  data() {
+    return {
+      registerMailAddress: null,
+      registerPassword: null,
+      registerPasswordConfirm: null
+    }
+  },
   async asyncData({$axios}) {
-    const items = await $axios.$get("http://localhost:5000/")
-    console.log(items)
+    const items = await $axios.$get("http://localhost:5000/");
+    console.log(items);
     return {items};
+  },
+  methods: {
+    onClickSubmit() {
+      let params = new URLSearchParams();
+      params.append('mailAddress', this.registerMailAddress)
+      params.append('password', this.registerPassword)
+      params.append('passwordConfirm', this.registerPasswordConfirm)
+      this.$axios.$post("http://localhost:5000/add", params)
+        .then(res => {
+          console.log(res)
+        })
+        .catch((err) => console.log(err))
+    }
   }
 };
 </script>
@@ -53,14 +75,15 @@ body {
   height: fit-content;
   margin: 0 auto;
   border-radius: 10px;
-  background-color: rgb(87, 122, 237);
+  border: 1px solid rgb(87, 122, 237);
 }
 
 .card-title {
   margin: 10px 0 0 0;
   padding: 10px 15px;
   text-align: center;
-  color: white;
+  color: rgb(87, 122, 237);
+  font-weight: 100;
 }
 
 .register-form {
@@ -71,7 +94,7 @@ body {
   width: 70%;
   padding: 10px 20px;
   border-radius: 5px;
-  border: 1px solid black;
+  border: 1px solid rgb(87, 122, 237);
 }
 
 .register-form input:focus {
@@ -103,16 +126,16 @@ body {
 }
 
 .form-send button {
-  color: white;
+  color: rgb(87, 122, 237);
   font-size: 20px;
   padding: 5px 20px;
   border-radius: 5px;
   border: 1px solid rgb(87, 122, 237);
-  background-color: rgb(87, 122, 237);
+  background-color: white;
 }
 
 .form-send button:active {
-  background-color: rgb(79, 93, 139);
+  background-color: rgb(174, 188, 231);
 }
 
 </style>
