@@ -4,13 +4,17 @@
       <h1 class="card-title">Register</h1>
       <form class="register-form" @submit.prevent="onClickSubmit">
         <div class="form-mailaddress">
-          <input type="email" class="register-mailaddress" placeholder="sample@mail.com" v-model="registerMailAddress"
-                 required>
+          <input type="email" class="register-mailaddress"
+                 placeholder="sample@mail.com" v-model="registerMailAddress" required>
+          <p class="error-message">{{ Validation.mail }}</p>
         </div>
         <div class="form-password">
-          <input type="password" class="register-password" placeholder="password" v-model="registerPassword" required>
-          <input type="password" class="password-confirm" placeholder="confirm" v-model="registerPasswordConfirm"
-                 required>
+          <input type="password" class="register-password"
+                 placeholder="password" v-model="registerPassword" required>
+          <input type="password" class="password-confirm"
+                 placeholder="confirm" v-model="registerPasswordConfirm" required>
+          <p class="error-message">{{ Validation.password }}</p>
+          <p class="error-message">{{ Validation.passwordConfirm }}</p>
         </div>
         <div class="form-send">
           <button type="submit">登録</button>
@@ -28,9 +32,14 @@ export default {
   },
   data() {
     return {
-      registerMailAddress: null,
-      registerPassword: null,
-      registerPasswordConfirm: null
+      registerMailAddress: "",
+      registerPassword: "",
+      registerPasswordConfirm: "",
+      Validation: {
+        mail: "",
+        password: "",
+        passwordConfirm: ""
+      }
     }
   },
   async asyncData({$axios}) {
@@ -40,18 +49,37 @@ export default {
   },
   methods: {
     onClickSubmit() {
-      let params = new URLSearchParams();
-      params.append('mailAddress', this.registerMailAddress)
-      params.append('password', this.registerPassword)
-      params.append('passwordConfirm', this.registerPasswordConfirm)
-      this.$axios.$post("http://localhost:5000/add", params)
+      let equalsResult = this.isEqualsPassword();
+      console.log("ResultEquals:" + equalsResult);
+      if (!equalsResult) return;
+      this.$axios.$post("http://localhost:5000/registerUser",
+        {
+          registerMailAddress: this.registerMailAddress,
+          registerPassword: this.registerPassword,
+          registerPasswordConfirm: this.registerPasswordConfirm
+        })
         .then(res => {
           console.log(res)
         })
         .catch((err) => console.log(err))
+    },
+    checkValidation() {
+
+    },
+    isEqualsPassword() {
+      if (this.registerPassword !== this.registerPasswordConfirm) {
+        this.Validation.passwordConfirm = "パスワードと確認パスワードが一致しません";
+        console.log("FALSE");
+        return false;
+      } else {
+        this.Validation.passwordConfirm = "";
+        console.log("TRUE");
+        return true;
+      }
     }
   }
-};
+}
+;
 </script>
 
 <style>
@@ -136,6 +164,11 @@ body {
 
 .form-send button:active {
   background-color: rgb(174, 188, 231);
+}
+
+.error-message {
+  color: red;
+  margin: 0;
 }
 
 </style>
