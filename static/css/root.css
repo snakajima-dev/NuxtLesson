@@ -1,0 +1,38 @@
+@charset "UTF-8";
+:root {
+  --main-color: #202644;
+  --sub-color: #1a88de;
+  --main-font-color: gray;
+  --border-bottom-color: rgba(128, 128, 128, 0.49);
+}
+
+html, body, p, ul, li, h1 {
+  margin: 0;
+  padding: 0;
+  font-family: "Century Gothic";
+  list-style: none;
+}
+
+.btn {
+  color: white;
+  width: 50%;
+  margin: 20px 0 10px;
+  padding: 13px 15px;
+  border: none;
+  border-radius: 20px;
+}
+
+.btn:active {
+  color: var(--main-color);
+  background: white;
+  border: var(--main-color) 1px solid;
+}
+
+input[type=text] {
+  width: 100%;
+  padding: 5px 13px;
+  border: none;
+  border-bottom: var(--main-font-color) 1px solid;
+  outline: none;
+  box-sizing: border-box;
+}
