@@ -1,25 +1,11 @@
 <template>
   <div class="contents-wrapper">
-    <div class="login_wrapper">
-      <h1 class="card-title">Login</h1>
-      <form class="login-form" action="#">
-        <div class="form-mailaddress">
-          <input type="email" class="login-mailaddress" placeholder="sample@mail.com" v-model="loginMailAddress"
-                 required>
-        </div>
-        <div class="form-password">
-          <input type="password" class="login-password" placeholder="password" v-model="loginPassword" required>
-          <input type="password" class="password-confirm" placeholder="confirm" v-model="loginPasswordConfirm" required>
-        </div>
-        <div class="for-get-password">
-          <nuxt-link to="/register">
-            <span>パスワードを忘れたら... &iquest;</span>
-          </nuxt-link>
-        </div>
-      </form>
+    <div class="title-wrapper">
+      <h1 class="title">ito 非公式アプリ</h1>
     </div>
-    <div class="form-send">
-      <button type="submit" @click="submitClick">送信</button>
+    <div class="button_wrapper">
+      <nuxt-link class="button" to="#">親として開始する</nuxt-link>
+      <nuxt-link class="button" to="#">参加者として参加する</nuxt-link>
     </div>
   </div>
 </template>
@@ -50,86 +36,63 @@ export default {
 </script>
 
 <style>
+@import "static/css/root.css";
+
 html {
   height: 100%;
 }
 
 body {
   height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  margin: 0;
 }
 
 .contents-wrapper {
-  height: 100%;
-}
-
-.login_wrapper {
-  width: fit-content;
-  height: fit-content;
-  margin: 0 auto;
-  border-radius: 10px;
-  background-color: rgb(87, 122, 237);
-}
-
-.card-title {
-  margin: 10px 0 0 0;
-  padding: 10px 15px;
-  text-align: center;
-  color: white;
-}
-
-.login-form {
-  text-align: center;
-}
-
-.login-form input {
-  width: 70%;
-  padding: 10px 20px;
-  border-radius: 5px;
-  border: 1px solid black;
-}
-
-.login-form input:focus {
-  outline: 0;
-  background-color: #e3ffff;
-}
-
-.form-mailaddress {
-  margin-bottom: 30px;
-}
-
-.form-password input {
-  margin: 15px 0;
-}
-
-.for-get-password {
   width: 100%;
-  text-align: center;
+  display: flex;
+  flex-direction: column;
 }
 
-.for-get-password a {
+.title-wrapper {
+  text-align: center;
+  color: gray;
+  margin: 25vw 0;
+}
+
+.button_wrapper {
+  width: fit-content;
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex-direction: column;
+  margin: 0 auto;
+}
+
+.button {
+  text-align: center;
+  padding: 10px 30px;
   color: white;
+  border-radius: 20px;
+  border: none;
   text-decoration: none;
 }
 
-.form-send {
-  margin: 20px 0;
-  text-align: center;
+.button:first-child {
+  background-color: var(--main-color);
 }
 
-.form-send button {
-  color: white;
-  font-size: 20px;
+.button:last-child {
+  background-color: var(--sub-color);
+}
+
+.login_wrapper input {
+  display: block;
+  margin: 20px auto;
   padding: 5px 20px;
-  border-radius: 5px;
-  border: 1px solid rgb(87, 122, 237);
-  background-color: rgb(87, 122, 237);
-}
-
-.form-send button:active {
-  background-color: rgb(79, 93, 139);
+  width: 70%;
+  border: none;
+  border-bottom: 1px solid gray;
+  outline: none;
 }
 
 </style>

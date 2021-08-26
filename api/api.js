@@ -10,7 +10,7 @@ const corsOptions = {
 const bcrypt = require('bcrypt');
 const app = express();
 const port = 5000;
-const salt = "32af8fa70bf4f86a847c5f1479895cef";
+const saltStl = 10;
 
 app.use(cors(corsOptions));
 app.use(bodyParser.urlencoded({extended: true}));
@@ -25,7 +25,7 @@ const connection = mysql.createConnection({
 
 app.get('/', (req, res) => {
   res.set({'Access-Control-Allow-Origin': '*'});//この記載で※1:CORSを許可する
-  connection.query('select * from todo', function (error, results) {
+  connection.query('select * from user', function (error, results) {
     if (error) throw error;
     res.on('error', () => console.log("onError"));
     res.send(results[0])
@@ -34,28 +34,41 @@ app.get('/', (req, res) => {
 
 app.post('/registerUser', ((req, res) => {
   res.set({'Access-Control-Allow-Origin': '*'});//この記載で※1:CORSを許可する
-  let mail = req.body['registerMailAddress'];
-  let password = req.body['registerPassword'];
-  let hashedPassword = bcrypt.hashSync(password, salt);
+  let userName = req.body['userName'];
+  let password = req.body['password'];
+  let hashedPassword = bcrypt.hashSync(password, saltStl);
   let date = new Date();
-  let timestampData = timestampToTime(date.now());
-  const sql = 'INSERT INTO user(mailaddress, password, create_at, update_at) values ?';
-  let sqlData = [mail, hashedPassword, timestampData, ''];
-  connection.query(sql, sqlData, (err, result) => {
+  let timestampData = timestampToTime(date.getTime());
+  const sql = 'INSERT INTO user(user_name, password, create_at, update_at) VALUES ?';
+  let sqlData = [[userName, hashedPassword, timestampData, timestampData]];
+  connection.query(sql, [sqlData], (err, result) => {
     if (err) throw err;
-    console.log("Number of records inserted: " + result.affectedRows);
-    console.log("Hash:" + hashedPassword);
+  });
+}))
+
+
+app.post('/isExistsUser', ((req, res) => {
+  let userName = req.body['userName'];
+  const sql = "SELECT COUNT(*) FROM user WHERE user_name = ?";
+  connection.query(sql, [userName], (err, result) => {
+    if (err) throw err;
+    let resultCount = result[0]['COUNT(*)'];
+    if (resultCount >= 1) {
+      res.send(true);
+    } else {
+      res.send(false);
+    }
   });
 }))
 
 app.get('/result', (erq, res) => {
-  res.send('Results')
+  res.send('Results');
 })
 
 app.listen(port, () => console.log(`start app listening on port ${port}!`))
 
 const timestampToTime = (timestamp) => {
-  const date = new Date(timestamp * 1000);
+  const date = new Date(timestamp);
   const yyyy = date.getFullYear();
   const MM = `0${date.getMonth() + 1}`.slice(-2);
   const dd = `0${date.getDate()}`.slice(-2);
